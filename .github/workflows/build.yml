@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Install MozillaBuild
-        run: "choco install mozillabuild -y"
+        run: choco install mozillabuild -y --no-progress
       - name: Bootstrap Mozilla Source
         shell: C:\mozilla-build\start-shell.bat -e {0}
         run: |
