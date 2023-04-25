@@ -13,11 +13,13 @@ jobs:
         run: "curl -o mozilla-build.exe -L https://ftp.mozilla.org/pub/mozilla/libraries/win32/MozillaBuildSetup-Latest.exe"
       - name: Install Mozilla Build
         shell: cmd
-        run: "mozilla-build.exe /S /D=.\\mozilla-build"
+        run: "mozilla-build.exe /S /D=D:\\workdir\\mozilla-build"
       - name: Open Mozilla Build Shell
         shell: cmd
         run: |
-          call ".\mozilla-build\start-shell.bat"
+          call "D:\workdir\mozilla-build\start-shell.bat"
+          cd d:/
+          cd workdir
           mkdir mozilla-source
           cd mozilla-source
           wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
