@@ -9,18 +9,10 @@ jobs:
   build-reggubed-firefox:
     runs-on: windows-latest
     steps:
-      - name: Download Mozilla Build
-        run: "curl -o mozilla-build.exe -L https://ftp.mozilla.org/pub/mozilla/libraries/win32/MozillaBuildSetup-Latest.exe"
       - name: Install Mozilla Build
-        shell: cmd
-        run: "mozilla-build.exe /S /D=D:\\workdir\\mozilla-build"
+        run: "choco install mozillabuild -y"
       - name: Open Mozilla Build Shell
-        shell: cmd
+        shell: C:\mozilla-build\start-shell.bat -e {0}
         run: |
-          call "D:\workdir\mozilla-build\start-shell.bat"
           cd d:/
-          cd workdir
-          mkdir mozilla-source
-          cd mozilla-source
-          wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
-          python3 bootstrap.py
+          ls -la
