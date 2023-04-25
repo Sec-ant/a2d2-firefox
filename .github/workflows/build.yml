@@ -3,7 +3,7 @@ name: Build
 on:
   workflow_dispatch:
 
-env:
+# env:
 
 jobs:
   build-reggubed-firefox:
