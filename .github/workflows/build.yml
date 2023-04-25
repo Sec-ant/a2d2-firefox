@@ -1,0 +1,15 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+env:
+
+jobs:
+  build-reggubed-firefox:
+    runs-on: windows-latest
+    steps:
+      - name: Download Mozilla Build
+        run: "curl -o ./mozilla-build.exe -L https://ftp.mozilla.org/pub/mozilla/libraries/win32/MozillaBuildSetup-Latest.exe"
+      - name: Install Mozilla Build
+        run: "./mozilla-build.exe"
