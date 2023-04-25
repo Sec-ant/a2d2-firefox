@@ -13,3 +13,8 @@ jobs:
         run: "curl -o ./mozilla-build.exe -L https://ftp.mozilla.org/pub/mozilla/libraries/win32/MozillaBuildSetup-Latest.exe"
       - name: Install Mozilla Build
         run: "./mozilla-build.exe"
+      - name: Open Mozilla Build Shell
+        shell: cmd
+        run: |
+          call "C:\mozilla-build\start-shell.bat"
+          ls -la
