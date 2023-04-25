@@ -9,13 +9,13 @@ jobs:
   build-reggubed-firefox:
     runs-on: windows-latest
     steps:
-      - name: Install Mozilla Build
+      - name: Install MozillaBuild
         run: "choco install mozillabuild -y"
-      - name: Open Mozilla Build Shell
+      - name: Bootstrap Mozilla Source
         shell: C:\mozilla-build\start-shell.bat -e {0}
         run: |
           cd d:/
           mkdir mozilla-source
           cd mozilla-source
           wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
-          python3 bootstrap.py
+          python3 bootstrap.py --application-choice=browser --no-interactive
