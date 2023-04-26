@@ -51,7 +51,7 @@ jobs:
           cd ./mozilla-source/mozilla-unified
           ./mach build
           ./mach package
-          # ./mach build installers-zh-CN
+          ./mach build installers-zh-CN
       - name: Upload Artifacts
         id: upload-artifacts
         uses: actions/upload-artifact@v3
