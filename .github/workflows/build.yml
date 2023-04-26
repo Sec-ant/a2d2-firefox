@@ -1,6 +1,8 @@
 name: Build
 
 on:
+  repository_dispatch:
+    types: [firefox-source-code-update]
   workflow_dispatch:
     inputs:
       debugger_keyword:
@@ -40,8 +42,8 @@ jobs:
         run: |
           cd c:/
           cd ./mozilla-source/mozilla-unified
-          sed -i 's/MACRO(debugger/MACRO(${{ inputs.debugger_keyword }}/' ./js/src/frontend/ReservedWords.h
-          sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ inputs.debugger_keyword }}, debugger, "${{ inputs.debugger_keyword }}")/' ./js/src/vm/CommonPropertyNames.h
+          sed -i 's/MACRO(debugger/MACRO(${{ inputs.debugger_keyword || 'reggubed' }}/' ./js/src/frontend/ReservedWords.h
+          sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ inputs.debugger_keyword || 'reggubed' }}, debugger, "${{ inputs.debugger_keyword || 'reggubed' }}")/' ./js/src/vm/CommonPropertyNames.h
       - name: Build and Package
         shell: C:\mozilla-build\start-shell.bat -e {0}
         run: |
