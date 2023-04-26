@@ -3,19 +3,27 @@ name: Build
 on:
   workflow_dispatch:
 
-# env:
-
 jobs:
   build-reggubed-firefox:
     runs-on: windows-latest
     steps:
-      - name: Install MozillaBuild
-        run: choco install mozillabuild -y --no-progress
-      - name: Bootstrap Mozilla Source
-        shell: C:\mozilla-build\start-shell.bat -e {0}
-        run: |
-          cd d:/
-          mkdir mozilla-source
-          cd mozilla-source
-          wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
-          python3 bootstrap.py --application-choice=browser --no-interactive
+      - name: Get VC Redistributable Files
+        uses: ilammy/msvc-dev-cmd@v1
+        run: wsl wslpath -u '%VCToolsRedistDir%' | wsl sed 's/\/mnt//' | wsl sed -E 's/.+MSVC\/([0-9]{2})\.([0-9]).+/\0x64\/Microsoft.VC\1\2.CRT/'
+      # - name: Install MozillaBuild
+      #   run: choco install mozillabuild -y --no-progress
+      # - name: Bootstrap Mozilla Source
+      #   shell: C:\mozilla-build\start-shell.bat -e {0}
+      #   run: |
+      #     cd d:/
+      #     mkdir mozilla-source
+      #     cd mozilla-source
+      #     wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
+      #     python3 bootstrap.py --application-choice=browser --no-interactive
+      # - name: Initialize mozconfig
+      #   shell: C:\mozilla-build\start-shell.bat -e {0}
+      #   run: |
+      #     cd d:/
+      #     cd ./mozilla-source/mozilla-unified
+      #     echo "ac_add_options --with-branding=browser/branding/official"
+      #     echo "export WIN32_REDIST_DIR="/c/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.28.29325/x86/Microsoft.VC142.CRT"
