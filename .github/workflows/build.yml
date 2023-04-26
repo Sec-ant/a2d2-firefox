@@ -1,13 +1,12 @@
 name: Build
 
-inputs:
-  debugger_keyword:
-    description: "Name of the debugger keyword"
-    required: false
-    default: "reggubed"
-
 on:
   workflow_dispatch:
+    inputs:
+      debugger_keyword:
+        description: "Name of the debugger keyword"
+        required: false
+        default: "reggubed"
 
 jobs:
   build-reggubed-firefox:
