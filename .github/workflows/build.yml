@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Get VC Redistributable Files
-        run: wsl wslpath -u '%VCToolsRedistDir%' | wsl sed 's/\/mnt//' | wsl sed -E 's/.+MSVC\/([0-9]{2})\.([0-9]).+/\0x64\/Microsoft.VC\1\2.CRT/'
+        run: bash -c "echo '%VCToolsRedistDir:\=/%' | sed 's/^C:/\/c/' | sed -E 's/.+MSVC\/([0-9]{2})\.([0-9]).+/\0x64\/Microsoft.VC\1\2.CRT/'"
       # - name: Install MozillaBuild
       #   run: choco install mozillabuild -y --no-progress
       # - name: Bootstrap Mozilla Source
