@@ -40,7 +40,7 @@ jobs:
         run: |
           cd d:/
           cd ./mozilla-source/mozilla-unified
-          sed -i 's/MACRO(debugger/MACRO(${{ inputs.debugger_keyword }}/' ./js/source/frontend/ReservedWords.h
+          sed -i 's/MACRO(debugger/MACRO(${{ inputs.debugger_keyword }}/' ./js/src/frontend/ReservedWords.h
           sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ inputs.debugger_keyword }}, debugger, "${{ inputs.debugger_keyword }}")/' .js/src/vm/CommonPropertyNames.h
       - name: Build and Package
         shell: C:\mozilla-build\start-shell.bat -e {0}
