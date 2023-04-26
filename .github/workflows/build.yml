@@ -49,7 +49,7 @@ jobs:
           cd ./mozilla-source/mozilla-unified
           ./mach build
           ./mach package
-          ./mach package-multi-locale --locales zh-CN
+          ./mach build installers-zh-CN
       - name: Upload Artifacts
         id: upload-artifacts
         uses: actions/upload-artifact@v3
