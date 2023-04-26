@@ -12,55 +12,56 @@ jobs:
   build-reggubed-firefox:
     runs-on: windows-latest
     steps:
-      - name: Install MozillaBuild
-        run: choco install mozillabuild -y --no-progress
-      - name: Bootstrap Mozilla Source
-        shell: C:\mozilla-build\start-shell.bat -e {0}
-        run: |
-          cd d:/
-          mkdir mozilla-source
-          cd mozilla-source
-          wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
-          python3 bootstrap.py --application-choice=browser --no-interactive
-      - name: Update Local Source
-        shell: C:\mozilla-build\start-shell.bat -e {0}
-        run: |
-          cd d:/
-          cd ./mozilla-source/mozilla-unified
-          hg up -C central
-      - name: Initialize `mozconfig`
-        shell: C:\mozilla-build\start-shell.bat -e {0}
-        run: |
-          cd d:/
-          cd ./mozilla-source/mozilla-unified
-          echo "ac_add_options --with-branding=browser/branding/official" > mozconfig
-          echo export WIN32_REDIST_DIR=\"$(realpath /c/Program\ Files/Microsoft\ Visual\ Studio/*/*/VC/Redist/MSVC/*.*/x64/*.CRT | head -n 1)\" >> mozconfig
-      - name: Replace `debugger` Keyword
-        shell: C:\mozilla-build\start-shell.bat -e {0}
-        run: |
-          cd d:/
-          cd ./mozilla-source/mozilla-unified
-          sed -i 's/MACRO(debugger/MACRO(${{ inputs.debugger_keyword }}/' ./js/src/frontend/ReservedWords.h
-          sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ inputs.debugger_keyword }}, debugger, "${{ inputs.debugger_keyword }}")/' ./js/src/vm/CommonPropertyNames.h
-      - name: Build and Package
-        shell: C:\mozilla-build\start-shell.bat -e {0}
-        run: |
-          cd d:/
-          cd ./mozilla-source/mozilla-unified
-          ./mach build
-          ./mach package
-          ./mach package-multi-locale --locales zh-CN
-      - name: Upload Artifacts
-        id: upload-artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: regubbed-firefox-artifacts
-          path: "D:/mozilla-source/mozilla-unified/obj-x86_64-pc-windows-msvc/dist/install/sea"
-      - name: Set Env
-        run: |
-          echo "NOW=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
-      - name: Create Release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "D:/mozilla-source/mozilla-unified/obj-x86_64-pc-windows-msvc/dist/install/sea/*"
-          tag: ${{ env.NOW }}
+      - name: Get Available Spaces
+        run: Get-PSDrive
+      # - name: Install MozillaBuild
+      #   run: choco install mozillabuild -y --no-progress
+      # - name: Bootstrap Mozilla Source
+      #   shell: C:\mozilla-build\start-shell.bat -e {0}
+      #   run: |
+      #     cd d:/
+      #     mkdir mozilla-source
+      #     cd mozilla-source
+      #     wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
+      #     python3 bootstrap.py --application-choice=browser --no-interactive
+      # - name: Update Local Source
+      #   shell: C:\mozilla-build\start-shell.bat -e {0}
+      #   run: |
+      #     cd d:/
+      #     cd ./mozilla-source/mozilla-unified
+      #     hg up -C central
+      # - name: Initialize `mozconfig`
+      #   shell: C:\mozilla-build\start-shell.bat -e {0}
+      #   run: |
+      #     cd d:/
+      #     cd ./mozilla-source/mozilla-unified
+      #     echo "ac_add_options --with-branding=browser/branding/official" > mozconfig
+      #     echo export WIN32_REDIST_DIR=\"$(realpath /c/Program\ Files/Microsoft\ Visual\ Studio/*/*/VC/Redist/MSVC/*.*/x64/*.CRT | head -n 1)\" >> mozconfig
+      # - name: Replace `debugger` Keyword
+      #   shell: C:\mozilla-build\start-shell.bat -e {0}
+      #   run: |
+      #     cd d:/
+      #     cd ./mozilla-source/mozilla-unified
+      #     sed -i 's/MACRO(debugger/MACRO(${{ inputs.debugger_keyword }}/' ./js/src/frontend/ReservedWords.h
+      #     sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ inputs.debugger_keyword }}, debugger, "${{ inputs.debugger_keyword }}")/' ./js/src/vm/CommonPropertyNames.h
+      # - name: Build and Package
+      #   shell: C:\mozilla-build\start-shell.bat -e {0}
+      #   run: |
+      #     cd d:/
+      #     cd ./mozilla-source/mozilla-unified
+      #     ./mach build
+      #     ./mach package
+      #     ./mach package-multi-locale --locales zh-CN
+      # - name: Upload Artifacts
+      #   id: upload-artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: regubbed-firefox-artifacts
+      #     path: "D:/mozilla-source/mozilla-unified/obj-x86_64-pc-windows-msvc/dist/install/sea"
+      # - name: Set Env
+      #   run: echo "NOW=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
+      # - name: Create Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: "D:/mozilla-source/mozilla-unified/obj-x86_64-pc-windows-msvc/dist/install/sea/*"
+      #     tag: ${{ env.NOW }}
