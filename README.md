@@ -1,6 +1,4 @@
-# <img alt="firefox" src="https://user-images.githubusercontent.com/10386119/234802229-84233a0d-bcc5-4d4a-ad13-ec0a1be46510.png" width=64px > {anti-{{anti-debugging}-debugger}}-firefox 
-
-
+# <img alt="firefox" src="https://user-images.githubusercontent.com/10386119/234802229-84233a0d-bcc5-4d4a-ad13-ec0a1be46510.png" width=64px > <br /> {anti-{{anti-debugging}-debugger}}-firefox 
 
 <img alt="anti-anti-debugging-debugger-firefox-demo" src="https://user-images.githubusercontent.com/10386119/234786387-dede6c9e-57d1-4ee1-80c8-adfc65276df1.gif" width=50% >
 
