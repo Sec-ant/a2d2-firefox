@@ -1,5 +1,7 @@
 # anti-anti-debugging-debugger-firefox
 
+<sub>`{anti-{{anti-debugging}-debugger}}-firefox`</sub>
+
 The Firefox build that evades JavaScript anti-debugging `debugger` mechanisms
 
 ## Introduction
