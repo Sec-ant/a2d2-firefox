@@ -55,11 +55,6 @@ jobs:
           sed -i 's/MACRO(debugger/MACRO(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}/' ./js/src/frontend/ReservedWords.h
           sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}, debugger, "${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}")/' ./js/src/vm/CommonPropertyNames.h
 
-      - name: Patch `run_glean_parser.py`
-        working-directory: C:\mozilla-source\mozilla-unified
-        shell: C:\mozilla-build\start-shell.bat -here -e {0}
-        run: sed -i "s/if lint.lint_yaml_files(/if hasattr(lint, 'lint_yaml_files') and lint.lint_yaml_files(/" ./toolkit/components/glean/build_scripts/glean_parser_ext/run_glean_parser.py
-
       - name: Build and Package
         working-directory: C:\mozilla-source\mozilla-unified
         shell: C:\mozilla-build\start-shell.bat -here -e {0}
