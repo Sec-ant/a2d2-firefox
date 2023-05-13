@@ -36,7 +36,7 @@ jobs:
         shell: C:\mozilla-build\start-shell.bat -here -e {0}
         run: |
           echo "ac_add_options --with-branding=browser/branding/official" > mozconfig
-          echo "export WIN32_REDIST_DIR=\"$(realpath /c/Program\ Files/Microsoft\ Visual\ Studio/*/*/VC/Redist/MSVC/*.*/x64/*.CRT | head -n 1)\"" >> mozconfig
+          # echo "export WIN32_REDIST_DIR=\"$(realpath /c/Program\ Files/Microsoft\ Visual\ Studio/*/*/VC/Redist/MSVC/*.*/x64/*.CRT | head -n 1)\"" >> mozconfig
 
       - name: Set Release Tag Output
         id: release-tag
