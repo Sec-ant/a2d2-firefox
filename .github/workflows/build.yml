@@ -23,7 +23,7 @@ jobs:
         run: |
           mkdir mozilla-source
           cd mozilla-source
-          wget https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
+          wget --tries=5 https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
           python3 bootstrap.py --application-choice=browser --no-interactive
 
       - name: Update Local Source
@@ -36,7 +36,6 @@ jobs:
         shell: C:\mozilla-build\start-shell.bat -here -e {0}
         run: |
           echo "ac_add_options --with-branding=browser/branding/official" > mozconfig
-          # echo "export WIN32_REDIST_DIR=\"$(realpath /c/Program\ Files/Microsoft\ Visual\ Studio/*/*/VC/Redist/MSVC/*.*/x64/*.CRT | head -n 1)\"" >> mozconfig
 
       - name: Set Release Tag Output
         id: release-tag
