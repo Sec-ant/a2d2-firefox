@@ -1,4 +1,4 @@
-# {Anti {{Anti Debugging} Debugger}} Firefox 
+# {Anti {{Anti Debugging} Debugger}} Firefox
 
 <img alt="anti-anti-debugging-debugger-firefox-demo" src="https://user-images.githubusercontent.com/10386119/234786387-dede6c9e-57d1-4ee1-80c8-adfc65276df1.gif" width=75% >
 
@@ -6,7 +6,7 @@ The Firefox build that evades JavaScript anti-debugging `debugger` mechanisms.
 
 ## Introduction
 
-This repository maintains GitHub Workflows for building Firefox browsers (in Windows only, as of now) that support replacing the [JavaScript keyword `debugger`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/debugger) with custom keywords. This customization is an efficient way to circumvent the [`debugProtection`](https://github.com/javascript-obfuscator/javascript-obfuscator#debugprotection) anti-debugging mechanism utilized by many websites, such as [weread](https://weread.qq.com/) and [mycloud](http://mcloud.to/), to protect their client-side JavaScript code. By using the browser builds provided in this repository, developers can freely debug protected JavaScript code without worrying about the limitations brought by `debugProtection`. By default, the custom keyword is set to `debugger[%Y%m%d%H%M%S]`, where `[%Y%m%d%H%M%S]` is a timestamp acquired during the build process, e.g. `20230427040458`.
+This repository provides GitHub Workflows to build Firefox browsers that replace the [JavaScript `debugger`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/debugger) with custom keywords. This bypasses the [`debugProtection`](https://github.com/javascript-obfuscator/javascript-obfuscator#debugprotection) used by websites like [weread](https://weread.qq.com/) and [mycloud](http://mcloud.to/) to secure their JavaScript code. Using these browser builds, developers can debug protected code without `debugProtection` constraints. The default keyword is `debugger[%Y%m%d%H%M%S]`, where `[%Y%m%d%H%M%S]` is a build-time timestamp, e.g., `20230427040458`. The workflow also allows for the customization of the `debugger` keyword.
 
 ## Download & Install
 
@@ -19,4 +19,3 @@ If you would like to fork this repo and run the actions under your account, plea
 ## References
 
 [Evading JavaScript Anti-Debugging Mechanisms by nullptrs](https://web.archive.org/web/20211031140141/https://nullpt.rs/evading-anti-debugging-techniques/)
-
