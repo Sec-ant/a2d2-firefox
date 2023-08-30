@@ -34,8 +34,7 @@ jobs:
       - name: Initialize `mozconfig`
         working-directory: C:\mozilla-source\mozilla-unified
         shell: C:\mozilla-build\start-shell.bat -here -e {0}
-        run: |
-          echo "ac_add_options --with-branding=browser/branding/official" > mozconfig
+        run: echo "ac_add_options --with-branding=browser/branding/official" > mozconfig
 
       - name: Set Release Tag Output
         id: release-tag
