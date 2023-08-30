@@ -1,0 +1,80 @@
+name: Build Firefox on Windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      debugger_keyword:
+        description: "Name of the debugger keyword"
+        required: false
+        type: string
+        default: ""
+
+  workflow_call:
+    inputs:
+      debugger_keyword:
+        description: "Name of the debugger keyword"
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Install MozillaBuild
+        run: choco install mozillabuild -y --no-progress
+
+      - name: Bootstrap Mozilla Source
+        working-directory: C:\
+        shell: C:\mozilla-build\start-shell.bat -here -e {0}
+        run: |
+          mkdir mozilla-source
+          cd mozilla-source
+          wget --tries=5 https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
+          python3 bootstrap.py --application-choice=browser --no-interactive
+
+      - name: Update Local Source
+        working-directory: C:\mozilla-source\mozilla-unified
+        shell: C:\mozilla-build\start-shell.bat -here -e {0}
+        run: hg up -C central
+
+      - name: Initialize `mozconfig`
+        working-directory: C:\mozilla-source\mozilla-unified
+        shell: C:\mozilla-build\start-shell.bat -here -e {0}
+        run: echo "ac_add_options --with-branding=browser/branding/official" > mozconfig
+
+      - name: Set Release Tag Output
+        id: release-tag
+        shell: C:\mozilla-build\start-shell.bat -e {0}
+        run: echo "NOW=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
+
+      - name: Construct New `debugger` Keyword
+        id: debugger-keyword
+        shell: C:\mozilla-build\start-shell.bat -e {0}
+        run: echo "DEBUGGER_KEYWORD=${{ inputs.debugger_keyword || format('debugger{0}', steps.release-tag.outputs.NOW) }}" >> "$GITHUB_OUTPUT"
+
+      - name: Replace `debugger` Keyword
+        working-directory: C:\mozilla-source\mozilla-unified
+        shell: C:\mozilla-build\start-shell.bat -here -e {0}
+        run: |
+          sed -i 's/MACRO(debugger/MACRO(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}/' ./js/src/frontend/ReservedWords.h
+          sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}, debugger, "${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}")/' ./js/src/vm/CommonPropertyNames.h
+
+      - name: Build and Package
+        working-directory: C:\mozilla-source\mozilla-unified
+        shell: C:\mozilla-build\start-shell.bat -here -e {0}
+        run: |
+          ./mach build
+          ./mach package
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-firefox-artifacts
+          path: "C:/mozilla-source/mozilla-unified/obj-x86_64-pc-windows-msvc/dist/install/sea"
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "C:/mozilla-source/mozilla-unified/obj-x86_64-pc-windows-msvc/dist/install/sea/*"
+          tag: windows-${{ steps.release-tag.outputs.NOW }}

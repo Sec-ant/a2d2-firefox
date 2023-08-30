@@ -1,4 +1,4 @@
-name: Building Firefox On Linux
+name: Build Firefox on Linux
 
 on:
   workflow_dispatch:
@@ -6,16 +6,28 @@ on:
       debugger_keyword:
         description: "Name of the debugger keyword"
         required: false
+        type: string
+        default: ""
+
+  workflow_call:
+    inputs:
+      debugger_keyword:
+        description: "Name of the debugger keyword"
+        required: false
+        type: string
         default: ""
 
 jobs:
-  build-firefox-on-linux:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Free up disk space
+      - name: Free up Disk Space
         run: |
           sudo rm -rf /usr/local/lib/android
           sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
 
       - name: Bootstrap Mozilla Source
         run: |
@@ -53,11 +65,11 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: firefox-artifacts
-          path: "./mozilla-unified"
+          name: linux-firefox-artifacts
+          path: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/install/*.tar.bz2"
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./mozilla-unified/*"
-          tag: ${{ steps.release-tag.outputs.NOW }}
+          artifacts: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/install/*.tar.bz2"
+          tag: linux-${{ steps.release-tag.outputs.NOW }}
