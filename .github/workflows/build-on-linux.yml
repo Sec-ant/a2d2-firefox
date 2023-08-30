@@ -66,10 +66,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: linux-firefox-artifacts
-          path: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/install/*.tar.bz2"
+          path: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/*.tar.bz2"
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/install/*.tar.bz2"
+          artifacts: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/*.tar.bz2"
           tag: linux-${{ steps.release-tag.outputs.NOW }}
