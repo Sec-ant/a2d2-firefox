@@ -1,0 +1,61 @@
+name: Building Firefox On Linux
+
+on:
+  workflow_dispatch:
+    inputs:
+      debugger_keyword:
+        description: "Name of the debugger keyword"
+        required: false
+        default: ""
+
+jobs:
+  build-firefox:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Mercurial
+        run: python3 -m pip install --user mercurial
+
+      - name: Bootstrap Mozilla Source
+        run: |
+          curl https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O
+          python3 bootstrap.py --application-choice=browser --no-interactive
+
+      - name: Update Local Source
+        working-directory: ./mozilla-unified
+        run: hg up -C central
+
+      - name: Initialize `mozconfig`
+        working-directory: ./mozilla-unified
+        run: echo "ac_add_options --with-branding=browser/branding/official" > mozconfig
+
+      - name: Set Release Tag Output
+        id: release-tag
+        run: echo "NOW=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
+
+      - name: Construct New `debugger` Keyword
+        id: debugger-keyword
+        run: echo "DEBUGGER_KEYWORD=${{ inputs.debugger_keyword || format('debugger{0}', steps.release-tag.outputs.NOW) }}" >> "$GITHUB_OUTPUT"
+
+      - name: Replace `debugger` Keyword
+        working-directory: ./mozilla-unified
+        run: |
+          sed -i 's/MACRO(debugger/MACRO(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}/' ./js/src/frontend/ReservedWords.h
+          sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}, debugger, "${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}")/' ./js/src/vm/CommonPropertyNames.h
+
+      - name: Build and Package
+        working-directory: ./mozilla-unified
+        run: |
+          ./mach build 
+          ./mach package
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: firefox-artifacts
+          path: "./mozilla-unified"
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./mozilla-unified/*"
+          tag: ${{ steps.release-tag.outputs.NOW }}
