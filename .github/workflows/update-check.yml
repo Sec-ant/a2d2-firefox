@@ -12,6 +12,8 @@ on:
 jobs:
   check-update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Get Commit Hash
         id: get-hash
@@ -37,7 +39,6 @@ jobs:
         if: steps.cache-hash.outputs.cache-hit != 'true'
         uses: peter-evans/repository-dispatch@v2
         with:
-          token: ${{ secrets.ACTIONS_TRIGGER_PAT }}
           event-type: firefox-source-code-update
 
       - name: Delete Workflow Runs
