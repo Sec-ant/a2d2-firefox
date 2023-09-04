@@ -31,6 +31,10 @@ jobs:
           sudo rm -rf /opt/hostedtoolcache/CodeQL
           sudo docker image prune --all --force
 
+      - name: Install Necessary Dependencies
+        run: |
+          sudo apt -y install libasound2-dev
+
       - name: Bootstrap Mozilla Source
         run: |
           curl https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O
