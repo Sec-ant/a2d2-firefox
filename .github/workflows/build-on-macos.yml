@@ -1,0 +1,83 @@
+name: Build Firefox on macOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      debugger_keyword:
+        description: "Name of the debugger keyword"
+        required: false
+        type: string
+        default: ""
+
+  workflow_call:
+    inputs:
+      debugger_keyword:
+        description: "Name of the debugger keyword"
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  build:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      # - name: Free up Disk Space
+      #   run: |
+      #     sudo rm -rf /usr/local/lib/android
+      #     sudo rm -rf /usr/share/dotnet
+      #     sudo rm -rf /opt/ghc
+      #     sudo rm -rf /opt/hostedtoolcache/CodeQL
+      #     sudo docker image prune --all --force
+
+      - name: Install Mercurial
+        run: python3 -m pip install mercurial==6.1.4
+
+      - name: Test Mercurial
+        run: hg version
+
+      # - name: Bootstrap Mozilla Source
+      #   run: |
+      #     curl https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O
+      #     python3 bootstrap.py --application-choice=browser --no-interactive
+
+      # - name: Update Local Source
+      #   working-directory: ./mozilla-unified
+      #   run: hg up -C central
+
+      # - name: Initialize `mozconfig`
+      #   working-directory: ./mozilla-unified
+      #   run: echo "ac_add_options --with-branding=browser/branding/official" > mozconfig
+
+      # - name: Set Release Tag Output
+      #   id: release-tag
+      #   run: echo "NOW=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
+
+      # - name: Construct New `debugger` Keyword
+      #   id: debugger-keyword
+      #   run: echo "DEBUGGER_KEYWORD=${{ inputs.debugger_keyword || format('debugger{0}', steps.release-tag.outputs.NOW) }}" >> "$GITHUB_OUTPUT"
+
+      # - name: Replace `debugger` Keyword
+      #   working-directory: ./mozilla-unified
+      #   run: |
+      #     sed -i 's/MACRO(debugger/MACRO(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}/' ./js/src/frontend/ReservedWords.h
+      #     sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}, debugger, "${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}")/' ./js/src/vm/CommonPropertyNames.h
+
+      # - name: Build and Package
+      #   working-directory: ./mozilla-unified
+      #   run: |
+      #     ./mach build 
+      #     ./mach package
+
+      # - name: Upload Artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: linux-firefox-artifacts
+      #     path: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/*.tar.bz2"
+
+      # - name: Create Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/*.tar.bz2"
+      #     tag: macos-${{ steps.release-tag.outputs.NOW }}
