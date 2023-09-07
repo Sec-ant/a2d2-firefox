@@ -58,9 +58,7 @@ jobs:
       - name: Replace `debugger` Keyword
         working-directory: C:\mozilla-source\mozilla-unified
         shell: C:\mozilla-build\start-shell.bat -here -e {0}
-        run: |
-          sed -i 's/MACRO(debugger/MACRO(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}/' ./js/src/frontend/ReservedWords.h
-          sed -i 's/MACRO_(debugger, debugger, "debugger")/MACRO_(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}, debugger, "${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}")/' ./js/src/vm/CommonPropertyNames.h
+        run: sed -i 's/MACRO(debugger/MACRO(${{ steps.debugger-keyword.outputs.DEBUGGER_KEYWORD }}/' ./js/src/frontend/ReservedWords.h
 
       - name: Build and Package
         working-directory: C:\mozilla-source\mozilla-unified
