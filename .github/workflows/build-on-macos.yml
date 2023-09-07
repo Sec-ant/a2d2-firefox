@@ -34,9 +34,6 @@ jobs:
       - name: Install Mercurial
         run: python3 -m pip install mercurial==6.1.4
 
-      - name: Test Mercurial
-        run: hg version
-
       - name: Bootstrap Mozilla Source
         run: |
           curl https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O
