@@ -67,8 +67,11 @@ jobs:
           ./mach build 
           ./mach package
 
-      - name: List Files
-        run: du ./mozilla-unified
+      - name: List Files in Dist Install
+        run: du -a ./mozilla-unified/obj-x86_64-apple-darwin21.6.0/dist/install
+
+      - name: List Files in Dist
+        run: du -a ./mozilla-unified/obj-x86_64-apple-darwin21.6.0/dist
 
       # - name: Upload Artifacts
       #   uses: actions/upload-artifact@v3
