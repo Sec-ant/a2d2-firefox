@@ -23,14 +23,6 @@ jobs:
     permissions:
       contents: write
     steps:
-      # - name: Free up Disk Space
-      #   run: |
-      #     sudo rm -rf /usr/local/lib/android
-      #     sudo rm -rf /usr/share/dotnet
-      #     sudo rm -rf /opt/ghc
-      #     sudo rm -rf /opt/hostedtoolcache/CodeQL
-      #     sudo docker image prune --all --force
-
       - name: Install Mercurial
         run: python3 -m pip install mercurial==6.1.4
 
@@ -65,20 +57,14 @@ jobs:
           ./mach build 
           ./mach package
 
-      - name: List Files in Dist Install
-        run: du -a ./mozilla-unified/obj-x86_64-apple-darwin21.6.0/dist/install
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-firefox-artifacts
+          path: "./mozilla-unified/obj-x86_64-apple-darwin*/dist/*.mac.dmg"
 
-      - name: List Files in Dist
-        run: du -a ./mozilla-unified/obj-x86_64-apple-darwin21.6.0/dist
-
-      # - name: Upload Artifacts
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: linux-firefox-artifacts
-      #     path: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/*.tar.bz2"
-
-      # - name: Create Release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     artifacts: "./mozilla-unified/obj-x86_64-pc-linux-gnu/dist/*.tar.bz2"
-      #     tag: macos-${{ steps.release-tag.outputs.NOW }}
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./mozilla-unified/obj-x86_64-apple-darwin*/dist/*.mac.dmg"
+          tag: macos-${{ steps.release-tag.outputs.NOW }}
