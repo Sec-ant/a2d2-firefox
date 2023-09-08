@@ -1,5 +1,7 @@
 # {Anti {{Anti Debugging} Debugger}} Firefox
 
+[![Build Firefox on All Platforms](https://github.com/Sec-ant/a2d2-firefox/actions/workflows/build.yml/badge.svg)](https://github.com/Sec-ant/a2d2-firefox/actions/workflows/build.yml)
+
 <img alt="a2d2-firefox-demo" src="https://user-images.githubusercontent.com/10386119/234786387-dede6c9e-57d1-4ee1-80c8-adfc65276df1.gif" width=75% >
 
 The Firefox build that evades JavaScript anti-debugging `debugger` mechanisms.
