@@ -32,8 +32,7 @@ jobs:
       - name: Update Hash
         id: update-hash
         if: steps.cache-hash.outputs.cache-hit != 'true'
-        run: |
-          echo ${{ steps.get-hash.outputs.commit_hash }} | tee .commit-hash
+        run: echo ${{ steps.get-hash.outputs.commit_hash }} | tee .commit-hash
 
       - name: Trigger Build
         id: trigger-build
