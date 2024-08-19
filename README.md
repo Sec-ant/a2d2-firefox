@@ -1,3 +1,5 @@
+This is no longer needed because firefox 121 introduced an option to disable the debugger statement: https://www.mozilla.org/en-US/firefox/121.0/releasenotes/#note-789917
+
 # {Anti {{Anti Debugging} Debugger}} Firefox
 
 [![Build Firefox on All Platforms](https://github.com/Sec-ant/a2d2-firefox/actions/workflows/build.yml/badge.svg)](https://github.com/Sec-ant/a2d2-firefox/actions/workflows/build.yml)
